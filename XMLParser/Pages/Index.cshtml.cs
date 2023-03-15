@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Text;
 using System.Xml;
 using XMLParser.Model;
 using XMLParser.Service;
@@ -27,17 +28,18 @@ namespace XMLParser.Pages
         public IActionResult OnGet()
         {
             return Page();
+            
         }
 
-        [HttpPost]
-        public  IActionResult OnPost(XmlFileRepresentation xmlFileRepresentation)
+       
+        public  IActionResult OnPost(IFormFile file)
         {
             XmlDocument doc = new XmlDocument();
 
-            doc.Load(xmlFileRepresentation.FilePath);
+            doc.LoadXml(UnicodeEncoding.UTF8.getString(new StringReader(file.FileName)));
 
             Node = (IEnumerable<Node>)_xmlFile.GetRootNode(doc);
-            
+
             _xmlFile.Nodes.Add((Node)Node);
 
             return Page();
