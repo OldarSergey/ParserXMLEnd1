@@ -1,0 +1,38 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">
+        <strong>
+                Счет-фактура
+        </strong>
+    </h1>
+</div>
+
+<div class="container">
+    <div class="row text-center">
+        <form method="Post">
+            <input type="file" asp-for="_xmlFile.FilePath" />
+            <button type="submit">Загрузить</button>
+        </form>
+        
+      
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
