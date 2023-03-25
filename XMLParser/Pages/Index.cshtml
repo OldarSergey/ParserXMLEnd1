@@ -14,8 +14,8 @@
 
 <div class="container">
     <div class="mb-3 mt-3">
-        <form method="post" enctype="multipart/form-data">
-            <div class="mb-3">
+       <form method="post" enctype="multipart/form-data">
+         <div class="mb-3">
                 <label class="form-label">Upload File</label>
                 <input type="file" name="file" class="form-control" />
 
@@ -26,11 +26,20 @@
                     Upload
                 </button>
             </div>
-        </form>
+       </form>
+           
+       
     </div>
 
+    @if (ViewData["Message"]!= null)
+    {
+        <div class="alert" style="margin-top:20px">
+            @ViewBag.Message
+        </div>
+    }
 
 
+    @await Html.PartialAsync("_OutputPartial ")
 </div>
 
 

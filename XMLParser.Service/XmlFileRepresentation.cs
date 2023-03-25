@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,7 +24,17 @@ namespace XMLParser.Service
         /// add check
         /// </summary>
         public XmlDocument XmlDocument 
-        { get => _xmlDocument; set => _xmlDocument = value; }
+
+        { get => _xmlDocument; 
+
+          set //add check
+            {
+                _xmlDocument = value;
+                _nodes.Clear();
+                _xmlDocument.Load(FilePath);
+                Nodes.Add(GetRootNode(_xmlDocument));
+            }
+        }
         public List<ElementStringRepresentation> ElementStringRepresentations 
         { get => _elementStringRepresentations; set => _elementStringRepresentations = value; }
         public List<Node> Nodes { get => _nodes; set => _nodes = value; }
@@ -65,7 +76,7 @@ namespace XMLParser.Service
         {
             var shortName = xmlNode.Name == "#text" ? xmlNode.Value : xmlNode.Name;
 
-            var node = new Node(shortName,GetFullName(shortName),xmlNode.Value);
+            var node = new Node(shortName, GetFullName(shortName), xmlNode.Value);
 
             var attributeCount = xmlNode.Attributes?.Count ?? 0;
 
@@ -86,6 +97,36 @@ namespace XMLParser.Service
 
             return node;
         }
+
+        public async Task<bool> UploadFile(IFormFile file)
+        {
+            string path = "";
+            try
+            {
+                if (file.Length > 0)
+                {
+                    path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "UploadedFiles"));
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    using (var fileStream = new FileStream(Path.Combine(path, file.FileName), FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("File Copy Failed", ex);
+            }
+        }
+
         public string GetFullName(string shortName)
         {
             return ElementStringRepresentations

@@ -1,23 +1,20 @@
-﻿using Microsoft.AspNetCore.DataProtection.Repositories;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Text;
 using System.Xml;
 using XMLParser.Model;
-using XMLParser.Service;
 
 namespace XMLParser.Pages
 {
     public class IndexModel : PageModel
     {
 
-        public XmlFileRepresentation _xmlFile;
+
 
         private readonly Service.IXmlRepository _xmlRepository;
 
         public IndexModel(Service.IXmlRepository xmlRepository)
         {
-            _xmlFile = new();
+
             _xmlRepository = xmlRepository;
         }
         public IEnumerable<Node> Node { get; set; }
@@ -28,24 +25,41 @@ namespace XMLParser.Pages
         public IActionResult OnGet()
         {
             return Page();
-            
+
         }
 
-       
-        public  IActionResult OnPost(IFormFile file)
+
+        [HttpPost]
+        public async Task<IActionResult> OnPost(IFormFile file)
         {
-            XmlDocument doc = new XmlDocument();
+            try
+            {
+                if (await _xmlRepository.UploadFile(file))
+                {
+                    ViewData["Message"] = "File Upload Successful";
+                }
+                else
+                {
+                    ViewData["Message"] = "File Upload Failed";
+                }
+            }
+            catch (Exception)
+            {
 
-            doc.LoadXml(UnicodeEncoding.UTF8.getString(new StringReader(file.FileName)));
+                ViewData["Message"] = "File Upload Failed";
+            }
 
-            Node = (IEnumerable<Node>)_xmlFile.GetRootNode(doc);
+            _xmlRepository.FilePath = (@$"C:\Users\Oldar\source\repos\XMLParser\XMLParser\UploadedFiles\{file.FileName}");
 
-            _xmlFile.Nodes.Add((Node)Node);
+            _xmlRepository.XmlDocument = new XmlDocument();
 
-            return Page();
+
+
+            return Partial("_OutputPartial ");
+
         }
 
-        
+
 
 
     }

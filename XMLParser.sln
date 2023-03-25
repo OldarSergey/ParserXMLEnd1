@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XMLParser", "XMLParser\XMLP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XMLParser.Model", "XMLParser.Model\XMLParser.Model.csproj", "{7CC824B7-85B8-46EE-95D2-9B39D929A244}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLParser.Service", "XMLParser.Service\XMLParser.Service.csproj", "{B9C3EB5C-B4B7-4E14-91F6-553BF285D81B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XMLParser.Service", "XMLParser.Service\XMLParser.Service.csproj", "{B9C3EB5C-B4B7-4E14-91F6-553BF285D81B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

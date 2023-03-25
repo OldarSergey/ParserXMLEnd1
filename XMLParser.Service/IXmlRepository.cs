@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -21,5 +22,6 @@ namespace XMLParser.Service
         public Node GetRootNode(XmlDocument xmlDocument);
         public Node MapXmlNode(XmlNode xmlNode);
         public string GetFullName(string shortName);
+        Task<bool> UploadFile(IFormFile file);
     }
 }
