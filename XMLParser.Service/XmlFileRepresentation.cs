@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 using XMLParser.Model;
 
 namespace XMLParser.Service
@@ -96,6 +97,24 @@ namespace XMLParser.Service
             }
 
             return node;
+        }
+
+      
+        public Node TreeView(Node nodes)
+        { 
+            var childCount = nodes.ChildNodes?.Count ?? 0;
+            if (childCount == 1)
+                return nodes;
+            
+            for(int i = 0; i< childCount;i++)
+            {
+                var item = nodes.ChildNodes[i];
+                var n = TreeView(item);
+                Console.WriteLine(n);
+            }
+            return nodes;
+
+            
         }
 
         public async Task<bool> UploadFile(IFormFile file)

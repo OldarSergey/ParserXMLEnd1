@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Xml;
+using System.Xml.Linq;
 using XMLParser.Model;
 
 namespace XMLParser.Pages
@@ -17,6 +18,8 @@ namespace XMLParser.Pages
 
             _xmlRepository = xmlRepository;
         }
+
+        [BindProperty]
         public IEnumerable<Node> Node { get; set; }
 
 
@@ -24,13 +27,17 @@ namespace XMLParser.Pages
 
         public IActionResult OnGet()
         {
+          
             return Page();
 
         }
 
 
+
+
+
         [HttpPost]
-        public async Task<IActionResult> OnPost(IFormFile file)
+        public async Task<PartialViewResult> OnPost(IFormFile file)
         {
             try
             {
@@ -53,11 +60,15 @@ namespace XMLParser.Pages
 
             _xmlRepository.XmlDocument = new XmlDocument();
 
+            Node = _xmlRepository.Nodes;
 
 
-            return Partial("_OutputPartial ");
+
+            return Partial("_CarPartial",_xmlRepository.Nodes);
 
         }
+
+
 
 
 
