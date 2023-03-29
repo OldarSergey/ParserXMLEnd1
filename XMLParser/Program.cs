@@ -29,6 +29,22 @@ namespace XMLParser
 
             app.UseAuthorization();
 
+
+
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name:"api",
+                    pattern:"{controller}/{action}/{id?}"
+                    
+                    
+                    );
+            });
+
+
+
+
             app.MapRazorPages();
 
             app.Run();

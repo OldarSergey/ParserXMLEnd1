@@ -100,22 +100,7 @@ namespace XMLParser.Service
         }
 
       
-        public Node TreeView(Node nodes)
-        { 
-            var childCount = nodes.ChildNodes?.Count ?? 0;
-            if (childCount == 1)
-                return nodes;
-            
-            for(int i = 0; i< childCount;i++)
-            {
-                var item = nodes.ChildNodes[i];
-                var n = TreeView(item);
-                Console.WriteLine(n);
-            }
-            return nodes;
-
-            
-        }
+        
 
         public async Task<bool> UploadFile(IFormFile file)
         {
