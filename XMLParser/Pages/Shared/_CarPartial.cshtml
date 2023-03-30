@@ -1,23 +1,52 @@
 ﻿@using XMLParser.Model;
 @using XMLParser.Service;
 @model List<Node>
-
-
-<div class="container">
-	<div class="row">
-		<div class="col">
-			<p
-				
-				@section Scripts{
-					<script>
-						@foreach
-					</script>
-				}
-			</p>
-		</div>
+		
 
 
 
+@{
+
+    Node TreeView(Node nodes)
+    {
+
+        var childCount = nodes.ChildNodes?.Count ?? 0;
+        if (childCount < 1)
+            return null;
+
+        for (int i = 0; i < childCount; i++)
+        {
+            var item = nodes.ChildNodes[i];
+            <ul>
+                <li>
+                    
+                    @item.ShortName
+                </li>       
+            </ul>           
+            <ul> 
+                <detailc>
+                    @TreeView(item)
+                </detailc>        
+            </ul>        
+        }
+        return null;
+    }
+}
+
+@{
+    foreach (var item in Model)
+    {
+        <details>
+            <summary>
+                @item.ShortName
+            </summary>
+
+            <ul id="myList">
+                @TreeView(item)
+            </ul>
+        </details>        
+    }
+}
 
 
 
@@ -26,15 +55,18 @@
 
 
 
+<script>
+    $(document).ready(function(){
+        const list = document.getElementById('myList');
+        list.addEventListener('click',function(event){
+            const selItem = event.target;
+            const selText = selItem.textContent;
+            Model.ForEach(item =>
+                if (item.ShortName == selText){
+                    selText = item.FullName
+                }
 
-
-
-
-
-
-		<div class="col">
-
-		</div>
-	</div>
-</div>
-
+            alert(selText);
+        });
+    })        
+</script>

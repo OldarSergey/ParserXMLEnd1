@@ -16,7 +16,9 @@
 <div class="container">
     
     <div class="mb-3 mt-3">
-        <form enctype="multipart/form-data" method="post"
+        <form 
+            enctype="multipart/form-data" 
+            method="post"
             data-ajax="true"
             data-ajax-method="post"
             data-ajax-loading="#loading"
@@ -25,20 +27,20 @@
 
              <div class="mb-3">
 
-                <input type="file" name="file" class="form-control" accept=".xml" asp-route="Custom" />
+                <input type="file" name="file" class="form-control" accept=".xml" asp-route="Custom" id="error"/>
 
              </div>
 
-            <button type="submit" class="btn btn-primary mb-3" id="btnContactUs" asp-route="Custom">Upload</button>
+            <button type="submit" class="btn btn-primary mb-3" id="send" asp-route="Custom">Upload</button>
 
 
           <span id="loading" style="display:none;"> <i class="fas fa-spinner fa-spin mb-3"></i></span>
        </form>
     
-       <div id="updateDiv" >
-        
-        </div>
+       
+       <div id="updateDiv" class="col"></div> 
     </div>
+
 
 
     @section Scripts {

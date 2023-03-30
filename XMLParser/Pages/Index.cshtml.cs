@@ -41,6 +41,9 @@ namespace XMLParser.Pages
         [HttpPost]
         public async Task<PartialViewResult> OnPost(IFormFile file)
         {
+
+          
+
             try
             {
                 if (await _xmlRepository.UploadFile(file))
@@ -57,46 +60,17 @@ namespace XMLParser.Pages
 
                 ViewData["Message"] = "File Upload Failed";
             }
+            
 
-            _xmlRepository.FilePath = (@$"C:\Users\Oldar\source\repos\XMLParser\XMLParser\UploadedFiles\{file.FileName}");
+            _xmlRepository.FilePath = (@$"C:\Users\student\Source\Repos\XMLParser\XMLParser\UploadedFiles\{file.FileName}");
 
             _xmlRepository.XmlDocument = new XmlDocument();
-
-           
-
-
-
-           foreach(var item in _xmlRepository.Nodes)
-           {
-
-                System.Diagnostics.Debug.WriteLine(item);
-
-
-                TreeView(item);
-           }
 
 
             return Partial("_CarPartial",_xmlRepository.Nodes);
 
         }
 
-        public Node TreeView(Node nodes)
-        {
-           
-            var childCount = nodes.ChildNodes?.Count ?? 0;
-            if (childCount < 1)
-                return nodes;
-
-            for (int i = 0; i < childCount; i++)
-            {
-
-                var item = nodes.ChildNodes[i];
-                System.Diagnostics.Debug.WriteLine(item);
-                TreeView(item);         
-            }
-            return nodes;
-
-
-        }
+       
     }
 }
