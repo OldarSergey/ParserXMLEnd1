@@ -1,5 +1,5 @@
 ﻿
-@page
+@page "{handler?}/{message?}"
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -24,7 +24,7 @@
             data-ajax-loading="#loading"
             data-ajax-mode="before"
             data-ajax-update="#updateDiv">
-
+            
              <div class="mb-3">
 
                 <input type="file" name="file" class="form-control" accept=".xml" asp-route="Custom" id="error"/>

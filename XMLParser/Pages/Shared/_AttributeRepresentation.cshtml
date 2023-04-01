@@ -1,0 +1,12 @@
+﻿@using XMLParser.Model;
+
+@model List<Model.Attribute>
+
+
+@foreach(var item in Model){
+     <p>
+       <strong>@item.ShortName</strong>
+       <p>@item.FullName</p>
+       <p>@item.Value</p>
+     </p>
+}
