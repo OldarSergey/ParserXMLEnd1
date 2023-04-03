@@ -1,78 +1,78 @@
 ﻿@using XMLParser.Model;
 @using XMLParser.Service;
 @model List<Node>
+
+
+
+
+@foreach (var item in Model)
+{
+    <details>
+        <summary>
+            <button id="LoadSignIn" class="btn btn-light my-button">
+                @item.ShortName 
+            </button>
+        </summary>
+
+        <ul id="myList">
+            @await TreeView(item)
+        </ul>
+    </details>
+}
+
+
+
+
 @{
     async Task<Node> TreeView(Node nodes)
     {
 
         var childCount = nodes.ChildNodes?.Count ?? 0;
         if (childCount < 1)
-            return null;
+            return nodes;
 
         for (int i = 0; i < childCount; i++)
         {
             var item = nodes.ChildNodes[i];
 
-            <ul>
-                <li>
-                   <button class="bnt">
-                     @item.ShortName
-                   </button>
-                   
-                </li>       
-            </ul>  
-    
-            <ul> 
-                <detailc>
-                    <button class="btn" asp-page-handler="BtnClick" >
-                                   @item.ShortName
+           <details>
+                <summary>
+
+                    <button id="LoadSignIn"  class="btn btn-light my-button" data-button-text="@item.ShortName" >
+                        @item.ShortName 
                     </button>
-                        @TreeView(item) 
-                </detailc> 
-                
-            </ul>  
-            
+                    
+                </summary>
+           
+                <ul>
+                    <li>    
+                        @await TreeView(item)                  
+                    </li>
+                </ul> 
+           </details>
+                    
+           
+   
         }
-        return null;
+        return nodes;
     }
     
 }
-@await Html.PartialAsync("_AttributeRepresentation")
-@{
-    foreach (var item in Model)
-    {
-        <details>
-            <summary>
-                <button class="btn" asp-page-handler="BtnClick">
-                    @item.ShortName
-                </button>
-
-            </summary>
 
 
-            <ul id="myList">
-                @TreeView(item)
-            </ul>
-        </details>
-    }
-}
 
+<script>
+    var buttons = document.querySelectorAll('.my-button');
 
-@{ 
-    foreach (var item in Model)
-    {
-        <details>
-            <summary>
-                <button class="btn" asp-page-handler="BtnClick">
-                    @item.ShortName
-                </button>
-                
-            </summary>
-
-
-            <ul id="myList">
-                @TreeView(item)
-            </ul>
-        </details>        
-    }
-}
+    buttons.forEach(function(button) {
+      button.addEventListener('click', function() {
+        var buttonText = this.getAttribute('data-button-text');
+        $.ajax({
+          url: "/Index?handler=BtnClick&buttonText=" + encodeURIComponent(buttonText),
+          success: function(result) {
+            $("#updateLoad").html(result);
+          }
+        });
+      });
+    });
+</script>

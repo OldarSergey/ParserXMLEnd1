@@ -7,70 +7,61 @@ namespace XMLParser.Pages
 {
     public class IndexModel : PageModel
     {
-
-
-
         private readonly Service.IXmlRepository _xmlRepository;
-
         public IndexModel(Service.IXmlRepository xmlRepository)
         {
-
             _xmlRepository = xmlRepository;
         }
-
         [BindProperty]
         public IEnumerable<Node> Node { get; set; }
-
-
         [FromRoute]
         [BindProperty(SupportsGet = true)]
-        public string Message { get; set; }
-
-
+        public string ButtonText { get; set; }
 
         public IActionResult OnGet()
         {
-
             return Page();
-
         }
 
-        public PartialViewResult OnGetBtnClick()
+
+
+
+
+        public PartialViewResult OnGetBtnClick(string buttonText)
         {
             foreach (var item in _xmlRepository.Nodes)
             {
-                if(Message == item.ShortName)
+                if (buttonText == item.ShortName)
+                    return Partial("_AttributeRepresentation", item.Attributes);
+            }
+
+            var node = FindNode(_xmlRepository.Nodes, buttonText);
+
+            if (node != null)
+            {
+                return Partial("_AttributeRepresentation", node.Attributes);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private Node FindNode(IEnumerable<Node> nodes, string buttonText)
+        {
+            foreach (var node in nodes)
+            {
+                if (buttonText == node.ShortName)
                 {
-                    return Partial("_CarPartial", item.Attributes);
+                    return node;
                 }
-                else
+                var childNode = FindNode(node.ChildNodes, buttonText);
+                if (childNode != null)
                 {
-                    return Partial ("_CarPartial", TreeView(item).Attributes);
+                    return childNode;
                 }
             }
             return null;
-          
-
-
-        }
-        public Node TreeView(Node nodes)
-        {
-            var childCount = nodes.ChildNodes?.Count ?? 0;
-            if (childCount < 1)
-                return nodes;
-            for(int i=0; i<childCount; i++)
-            {
-                if (Message == nodes.ChildNodes[i].ShortName)
-                {
-                    return nodes.ChildNodes[i];
-                    
-                }
-                else
-                {
-                    TreeView(nodes.ChildNodes[i]);
-                }
-            }
-            return nodes;
         }
 
 
@@ -79,9 +70,6 @@ namespace XMLParser.Pages
 
         public async Task<PartialViewResult> OnPost(IFormFile file)
         {
-
-
-
             try
             {
                 if (await _xmlRepository.UploadFile(file))
@@ -100,7 +88,7 @@ namespace XMLParser.Pages
             }
 
 
-            _xmlRepository.FilePath = (@$"C:\Users\student\source\repos\XMLParser\XMLParser\UploadedFiles\{file.FileName}");
+            _xmlRepository.FilePath = (@$"C:\Users\Oldar\Source\Repos\XMLParser\XMLParser\UploadedFiles\{file.FileName}");
 
             _xmlRepository.XmlDocument = new XmlDocument();
 

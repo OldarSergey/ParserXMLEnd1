@@ -52,7 +52,7 @@ namespace XMLParser.Model
 
         public override string ToString()
         {
-            return $"{ShortName} {FullName}";
+            return $"";
         }
     }
 }
