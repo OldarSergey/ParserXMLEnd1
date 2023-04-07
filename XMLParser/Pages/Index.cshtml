@@ -32,12 +32,13 @@
              </div>
 
             <button type="submit" class="btn btn-primary mb-3" id="send" asp-route="Custom">Upload</button>
-
+            
 
           <span id="loading" style="display:none;"> <i class="fas fa-spinner fa-spin mb-3"></i></span>
        </form>
     
        
+
        <div class="row">
             <div id="updateDiv" class="col"></div>
             <div id="updateLoad" class="col text-center"></div>
@@ -46,6 +47,12 @@
         
     </div>
 
+    @if (ViewData["Message"]!= null)
+    {
+        <div class="alert" style="margin-top:20px">
+            @ViewBag.Message
+        </div>
+    }
 
 
     @section Scripts {

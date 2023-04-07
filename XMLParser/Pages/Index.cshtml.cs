@@ -22,30 +22,34 @@ namespace XMLParser.Pages
         {
             return Page();
         }
-
-
-
-
-
         public PartialViewResult OnGetBtnClick(string buttonText)
         {
-            foreach (var item in _xmlRepository.Nodes)
+			var dtos = new List<DTOXmlRepresentation>();
+			foreach (var item in _xmlRepository.Nodes)
             {
                 if (buttonText == item.ShortName)
-                    return Partial("_AttributeRepresentation", item.Attributes);
+                {
+                    dtos.Add(new DTOXmlRepresentation(item.ShortName, item.FullName, item.Attributes));
+					return Partial("_AttributeRepresentation", dtos);
+                }
+                    
             }
 
             var node = FindNode(_xmlRepository.Nodes, buttonText);
 
             if (node != null)
             {
-                return Partial("_AttributeRepresentation", node.Attributes);
+                dtos.Add(new DTOXmlRepresentation(node.ShortName, node.FullName, node.Attributes));
             }
-            else
-            {
-                return null;
-            }
-        }
+
+			if (dtos.Any())
+			{
+				return Partial("_AttributeRepresentation", dtos);
+			}
+            return null;
+		}
+
+       
 
         private Node FindNode(IEnumerable<Node> nodes, string buttonText)
         {
@@ -70,31 +74,40 @@ namespace XMLParser.Pages
 
         public async Task<PartialViewResult> OnPost(IFormFile file)
         {
-            try
+            if (file != null)
             {
-                if (await _xmlRepository.UploadFile(file))
+                try
                 {
-                    ViewData["Message"] = "File Upload Successful";
+                    if (await _xmlRepository.UploadFile(file))
+                    {
+                        ViewData["Message"] = "File Upload Successful";
+                    }
+                    else
+                    {
+                        ViewData["Message"] = "File Upload Failed";
+                    }
                 }
-                else
+                catch (Exception)
                 {
+
                     ViewData["Message"] = "File Upload Failed";
                 }
+
+
+                _xmlRepository.FilePath = (@$"C:\Users\Oldar\Source\Repos\XMLParser\XMLParser\UploadedFiles\{file.FileName}");
+
+                _xmlRepository.XmlDocument = new XmlDocument();
+
+
+
+                return Partial("_CarPartial", _xmlRepository.Nodes);
             }
-            catch (Exception)
-            {
 
-                ViewData["Message"] = "File Upload Failed";
+            else {
+                return Partial("Empty");
             }
+            
 
-
-            _xmlRepository.FilePath = (@$"C:\Users\Oldar\Source\Repos\XMLParser\XMLParser\UploadedFiles\{file.FileName}");
-
-            _xmlRepository.XmlDocument = new XmlDocument();
-
-
-
-            return Partial("_CarPartial", _xmlRepository.Nodes);
 
         }
 

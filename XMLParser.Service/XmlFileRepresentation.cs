@@ -36,6 +36,11 @@ namespace XMLParser.Service
                 Nodes.Add(GetRootNode(_xmlDocument));
             }
         }
+
+
+
+
+
         public List<ElementStringRepresentation> ElementStringRepresentations 
         { get => _elementStringRepresentations; set => _elementStringRepresentations = value; }
         public List<Node> Nodes { get => _nodes; set => _nodes = value; }

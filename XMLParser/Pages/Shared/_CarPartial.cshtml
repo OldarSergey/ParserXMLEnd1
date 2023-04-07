@@ -2,61 +2,44 @@
 @using XMLParser.Service;
 @model List<Node>
 
-
-
-
 @foreach (var item in Model)
 {
     <details>
         <summary>
-            <button id="LoadSignIn" class="btn btn-light my-button">
+            <button id="LoadSignIn" class="btn btn-light my-button" data-button-text="@item.ShortName">
                 @item.ShortName 
             </button>
         </summary>
-
         <ul id="myList">
             @await TreeView(item)
         </ul>
     </details>
 }
 
-
-
-
 @{
     async Task<Node> TreeView(Node nodes)
     {
-
         var childCount = nodes.ChildNodes?.Count ?? 0;
         if (childCount < 1)
-            return nodes;
-
+            return null;
         for (int i = 0; i < childCount; i++)
         {
             var item = nodes.ChildNodes[i];
-
-           <details>
+            <details>
                 <summary>
-
                     <button id="LoadSignIn"  class="btn btn-light my-button" data-button-text="@item.ShortName" >
                         @item.ShortName 
                     </button>
-                    
                 </summary>
-           
                 <ul>
-                    <li>    
-                        @await TreeView(item)                  
+                    <li class="@((i == childCount - 1) ? "no-marker" : "")">
+                        @await TreeView(item)
                     </li>
                 </ul> 
            </details>
-                    
-           
-   
         }
         return nodes;
-    }
-    
+    }   
 }
 
 

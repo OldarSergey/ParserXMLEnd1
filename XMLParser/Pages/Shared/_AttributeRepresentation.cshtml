@@ -1,12 +1,18 @@
 ﻿@using XMLParser.Model;
 @using XMLParser.Service;
-@model List<XMLParser.Model.Attribute>
+@model List<DTOXmlRepresentation>;
+
 
 @foreach (var item in Model)
 {
-    <div>
-        <p>Short Name: @item.ShortName</p>
-        <p>Full Name: @item.FullName</p>
-        <p>Value: @item.Value</p>
-    </div>
+    <p><strong>@item.ShortName</strong></p>
+    <p>@item.FullName</p>
+
+    @foreach (var at in item.Attribute)
+    {
+        <div class="card text-start">
+            <p><strong>@at.FullName</strong></p>
+            <p>@at.Value</p>
+        </div>
+    }
 }
