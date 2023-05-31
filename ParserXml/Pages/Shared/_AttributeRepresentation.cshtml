@@ -1,0 +1,25 @@
+﻿@using ParserXml.Model.DTO;
+
+@model List<DTOXmlRepresentation>;
+
+@foreach (var item in Model)
+{
+    <p><strong>@item.ShortName</strong></p>
+    <p>@item.FullName</p>
+
+    <div class="overflow-auto">
+        @foreach (var at in item.Attribute)
+        {
+            <div class="card mb-2 border-2 rounded text-start p" style="background-color:rgba(208, 202, 205, 0.17);">
+                <p><strong>@at.FullName</strong></p>
+                <p>@at.Value</p>
+            </div>
+        }
+    </div>
+}
+
+
+
+
+
+

@@ -1,0 +1,63 @@
+﻿
+@using ParserXml.Model;
+@using XMLParser.Service;
+
+@model List<Node>
+
+@foreach (var item in Model)
+{
+    <details>
+        <summary>
+            <button id="LoadSignIn" class="btn btn-light my-button" data-button-text="@item.ShortName">
+                @item.ShortName
+            </button>
+        </summary>
+        <ul id="myList">
+            @await TreeView(item)
+        </ul>
+    </details>
+}
+
+@{
+    async Task<Node> TreeView(Node nodes)
+    {
+        var childCount = nodes.ChildNodes?.Count ?? 0;
+        if (childCount < 1)
+            return null;
+        for (int i = 0; i < childCount; i++)
+        {
+            var item = nodes.ChildNodes[i];
+            <details>
+                <summary>
+                    <button id="LoadSignIn" class="btn btn-light my-button" data-button-text="@item.ShortName">
+                        @item.ShortName
+                    </button>
+                </summary>
+                <ul>
+                    <li style="list-style-type:none;" class="@((i == childCount - 1) ? "no-marker" : "")">
+                        @await TreeView(item)
+                    </li>
+                </ul>
+            </details>
+        }
+        return nodes;
+    }
+}
+
+
+
+<script>
+    var buttons = document.querySelectorAll('.my-button');
+
+    buttons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            var buttonText = this.getAttribute('data-button-text');
+            $.ajax({
+                url: "/UserAuthorizationModel?handler=BtnClick&buttonText=" + encodeURIComponent(buttonText),
+                success: function (result) {
+                    $("#updateLoad").html(result);
+                }
+            });
+        });
+    });
+</script>

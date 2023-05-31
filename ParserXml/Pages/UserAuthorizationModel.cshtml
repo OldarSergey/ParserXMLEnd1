@@ -1,0 +1,111 @@
+﻿@page
+@model ParserXml.Pages.UserAuthorizationModelModel
+
+<div class="text-center">
+    <h1 class="display-4">
+        <strong>
+            Счет-фактура
+        </strong>
+    </h1>
+</div>
+
+<div class="container">
+
+    <div class="mb-3 mt-3">
+        <form enctype="multipart/form-data"
+              method="post"
+              data-ajax="true"
+              data-ajax-method="post"
+              data-ajax-loading="#loading"
+              data-ajax-mode="before"
+              data-ajax-update="#updateDiv">
+
+            <div class="mb-3">
+
+                <input type="file" name="file" class="form-control" accept=".xml" asp-route="Custom" id="error" />
+
+            </div>
+
+            <button type="submit" class="btn btn-primary mb-3" id="send" asp-route="Custom">Upload</button>
+
+
+            <span id="loading" style="display:none;"> <i class="fas fa-spinner fa-spin mb-3"></i></span>
+        </form>
+
+        
+
+        <div class="row">
+            <div id="updateDiv" class="col"></div>
+            <div id="updateLoad" class="col text-center"></div>
+        </div>
+    </div>
+
+    <script>
+        var buttons = document.querySelectorAll('.my-button1');
+
+        buttons.forEach(function(button) {
+          button.addEventListener('click', function() {
+            var buttonText = this.getAttribute('data-button-text');
+            $.ajax({
+              url: "/UserAuthorizationModel?handler=RepeateFileParser&buttonText=" + encodeURIComponent(buttonText),
+              success: function(result) {
+                $("#updateDiv").html(result);
+              }
+            });
+          });
+        });
+    </script>
+
+    @section Scripts {
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery-ajax-unobtrusive@3.2.6/dist/jquery.unobtrusive-ajax.min.js"></script>
+
+        
+    }
+    @section historyHeader{
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="mb-3">
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle" 
+                    type="button" style="background-color:rgba(208, 202, 205, 0.17);" 
+                    id="historyDropdownButton" 
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false">
+                        Загруженные файлы
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown-menu" aria-labelledby="historyDropdownButton">
+                        @foreach (var logging in await Model.GetLoggingsByUserIdAsync())
+                        {
+                            if (logging.File != null)
+                            {
+                                if (User.IsInRole("Администратор"))
+                                {  <li class="d-flex">
+                                        <form method="post">
+                                            <button type="submit" asp-page-handler="DeleteFile" asp-route-fileId="@logging.File.Id" class="my-button2" style="background: none; border: none; padding: 0; font: inherit; cursor: pointer;">
+                                                <img src="~/lib/img/basket.png" alt="Download" style="display: inline-block; vertical-align: middle;">
+                                            </button>
+                                        </form>
+                                        <button class="dropdown-item my-button1" data-button-text="@logging.File.FileName">
+                                            @logging.Date: @logging.File.FileName : @logging.User.UserName
+                                        </button>
+                                    </li>
+
+                                }
+                                else
+                                {
+                                    <li>
+                                        <button class="dropdown-item my-button1" data-button-text="@logging.File.FileName">
+                                            @logging.Date: @logging.File.FileName
+                                        </button>
+                                    </li>
+                                }
+                                
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    }
+</div>
