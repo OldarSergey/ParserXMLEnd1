@@ -4,16 +4,44 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center mb-3">
-    <h1 class="display-4 text-center">
-        <strong>
-            Счет-фактура
-        </strong>
-    </h1>
+
+
+<div class="col">
+    <div class="row">
+        <h1>Здравствуйте!!!</h1>
+        <p style="font-size:24px;">
+            Это приложение создано для приведения файлов типа XML в удобочитаемый вид.<br>
+            Надеюсь оно удовлетворит ваши желания и будет удобным решением для вас.
+        </p>
+    </div>
+    <div class="row">
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <div class="row" >
+                <strong>
+                    <p style="font-size:22px">
+                        Для получения доступа к приложению пройдите авторизацию.
+                    </p>
+                </strong>
+                
+            </div>
+        }
+        
+        <div class="row">
+            <figure class="text-end">
+                <img class=" mt-5 me-5 mb-5 shadow" style="right:10px;filter:brightness(75%); width:32%;" src="img/Notch_receives_the_Pioneer_Award_at_GDC_2016_(cropped).jpg" />
+                <blockquote class="blockquote ">
+                    <p>&laquo;Если твой код работает, значит это хороший код.&raquo;</p>
+                </blockquote>
+                <figcaption class="blockquote-footer" style="font-size:18px;">
+                    Маркус Перссон.
+                </figcaption>
+            </figure>
+        </div>
+    </div>
 </div>
 
-<div class="container text-center mb-3">
+   
+    
+    
 
-    <h1>Welcome</h1>
-
-</div>
