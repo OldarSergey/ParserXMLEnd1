@@ -13,10 +13,9 @@ namespace ParserXml
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-                        var connectionString = builder.Configuration.GetConnectionString("ParserXmlContextConnection") ?? throw new InvalidOperationException("Connection string 'ParserXmlContextConnection' not found.");
-
+                       
             // Add services to the container.
-            builder.Services.AddRazorPages();
+            builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
             builder.Services.AddSingleton<IXmlFileParser,XmlFileParser>();
             builder.Services.AddScoped<IFileService, FileService>();
             builder.Services.AddScoped<ILoggingsService, LoggingService>();
