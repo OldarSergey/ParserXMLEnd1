@@ -116,11 +116,11 @@ namespace ParserXml.Pages
                     _xmlRepository.FilePath = relativePath;
                     _xmlRepository.XmlDocument = new XmlDocument();
 
-                    return Partial("_CarPartial", _xmlRepository.Nodes);
+                    return Partial("_TreeViewPartial", _xmlRepository.Nodes);
                 }
             }
 
-            return Partial("_CarPartial");
+            return Partial("_TreeViewPartial");
         }
         public PartialViewResult OnGetRepeateFileParser(string buttonText)
         {
@@ -130,10 +130,10 @@ namespace ParserXml.Pages
             {
                 _xmlRepository.FilePath = _fileService.FindFilePath(buttonText);
                 _xmlRepository.XmlDocument = new XmlDocument();
-                return Partial("_CarPartial", _xmlRepository.Nodes);
+                return Partial("_TreeViewPartial", _xmlRepository.Nodes);
             }
 
-            return Partial("_CarPartial");
+            return Partial("_TreeViewPartial");
         }
         public async Task<List<Logging>> GetLoggingsByUserIdAsync()
         {
